@@ -36,7 +36,7 @@ jobs:
           source ~/.profile;
           pyenv global 3.9.17;
           pip install -U pip setuptools wheel Cython==3.0.0a9 launchpadlib==1.11.0 --ignore-installed;
-          pip install grpcio==1.53.0 --ignore-installed;
+          pip install grpcio==${{ inputs.release }} --ignore-installed;
           WHEEL_PATH=$(find /root/.cache/pip/wheels/ -name "grpcio*.whl");
           cp $WHEEL_PATH /build/;'          
 
