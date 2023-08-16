@@ -31,11 +31,15 @@ jobs:
           --platform "linux/ppc64le"
           --mount "type=bind,src=$(pwd),dst=/build"
           -w "/build"
-          "quay.io/raja0940/types-test:v3.9.17"
+          "ubuntu:20.04"
           /bin/bash -ec '
-          source ~/.profile;
+          export DEBIAN_FRONTEND=noninteractive;
+          apt-get update -y && apt-get install -y build-essential autoconf libtool pkg-config git software-properties-common curl;
+          add-apt-repository ppa:deadsnakes/ppa -y;
+          apt-get install python3.9 python3-pip python3-dev libpython3.9-dev -y;
+          python3.9 -m pip install --upgrade pip;
           pyenv global 3.9.17;
-          pip install -U pip setuptools wheel Cython==3.0.0a9 launchpadlib==1.11.0 --ignore-installed;
+          echo "Building grpc ${{ inputs.release }}";
           pip install grpcio==${{ inputs.release }} --ignore-installed;
           WHEEL_PATH=$(find /root/.cache/pip/wheels/ -name "grpcio*.whl");
           cp $WHEEL_PATH /build/;'          
